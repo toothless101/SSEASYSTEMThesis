@@ -16,6 +16,7 @@ class UserController extends Controller
     //Officer CRUD
     public function officer(){
         $users = User::latest()->get();
+       // dd($users);
         return view('admin.officer', compact('users')); //passin the user data to the view 
     }
 
@@ -57,7 +58,46 @@ class UserController extends Controller
         
            
         }
+        
 
     }
+
+    public function editOfficer(User $user)
+    {
+        dd($user);
+        return view('admin.posts.officer-modals.edit-officers', ['user' => $user]);
+    }
+
+
+   public function updateOfficer(Request $request, User $user)
+{
+    dd($user);
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email',
+        'username' => 'required|string|max:255',
+        'password' => 'nullable|string|min:6',
+        'usertype' => 'required|integer|in:1,2',
+        'user_img' => 'nullable|image|max:2048',
+    ]);
+
+    $filename = $user->user_img;
+    if ($request->hasFile('user_img')) {
+        $filename = time() . '.' . $request->user_img->extension();
+        $request->user_img->move(public_path('images'), $filename);
+    }
+
+    $user->update([
+        'name' => $request->name,
+         'email' => $request->email,
+         'username' => $request->username,
+         'password' => $request->password ? bcrypt($request->password) : $user->password,
+         'usertype' => $request->usertype,
+         'user_img' => $filename,
+     ]);
+
+    return redirect()->route('admin_officer')->with('success', 'Officer updated successfully!');
+}
+    
 
 }

@@ -35,7 +35,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>User Type</th>
-                    <th>Edit</th>
+                    <th>Action</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -44,18 +44,25 @@
                 @foreach ($users as $key => $user) <!--$user variable--->
                     <tr>
                         <td>{{ ++$key}}</td>
-                        <td><img src="/images/{{ $user->img}}" style="width: 80px;"></td>
+                        <td><img src="/images/{{ $user->user_img}}" style="width: 50px; height: 50px; border-radius: 50px"></td>
                         <td id="name-clm">{{ $user->name}}</td>
                         <td>{{ $user->email}} </td>
-                        <td> 
-
+                        <td>@if($user->usertype == 1)
+                                Admin
+                            @elseif($user->usertype == 2)
+                                Student Officer
+                            @else
+                            Unknown
+                            @endif
+                        </td>
+                        
                         <td>
-                                <a href="" class="" data-bs-toggle="modal" data-bs-target="#editOfficerModal">
+                                <a href="#" class="" data-bs-toggle="modal" data-bs-target="#editOfficerModal{{$user->id}}">
                                     <i class="bi bi-pencil-fill" style="color: #550000;"></i>
                                 </a>
                         </td>    
 
-                        <td>VIce </td>
+                        <td>Assigned </td>
                     </tr>
                 @endforeach
                 

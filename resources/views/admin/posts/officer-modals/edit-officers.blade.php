@@ -1,85 +1,121 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="{{  asset('css/pages-css/officers.css') }}">
 
-<div class="modal fade" id="editOfficerModal" tabindex="-1" aria-labelledby="addOfficerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addOfficerModalLabel">Edit Officer Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="row">
-                    <!-- Left Side: Image Upload and Preview -->
-                    <div class="col-md-6">
-                      <div class="form-group">
+@foreach ($users as $user )
+<div class="modal fade" id="editOfficerModal{{$user->id}}" tabindex="-1" aria-labelledby="editOfficerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="editOfficerModalLabel">Edit Officer</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="" action="{{route('officer_update', ['user' =>$user->id])}}" enctype="multipart/form-data">
+            @csrf
+             @method('PUT') 
+
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+
+            <div class="row">
+                <!-- Left Side: Image Upload and Preview -->
+                <div class="col-md-6">
+                    <div class="form-group">
                         <!-- Image Preview Section -->
                         <div class="d-flex justify-content-center">
-                          <div class="image-holder">
-                            <img id="output" src="{{asset('img/no-image-available.png')}}" alt="Placeholder Image">
-                          </div>
-                          
+                            <div class="image-holder">
+                                <img id="output" src="{{ $user->user_img ? Storage::url($user->user_img) : asset('img/no-image-available.png') }}" alt="Placeholder Image">
+                            </div>
                         </div>
-                        <!-- File Upload Label 
-                        <label for="customFile" class="control-label mt-3">Upload Image</label>-->
                         <!-- File Input -->
                         <div class="custom-file">
-                          <input type="file" class="custom-file-input" id="customFile" name="img" accept="image/*" onchange="loadFile(event)">
-                          <label class="custom-file-label" for="customFile">Choose file</label>
+                            <input type="file" class="form-control" id="user_img" name="user_img" accept="image/*" onchange="loadFile(event)">
                         </div>
-                      </div>
+
+                        @error('user_img')
+                            <span class="text-danger">{{ $message }}</span>     
+                        @enderror
                     </div>
+                </div>
+        
+                <!-- Right Side: Fields -->
+                <div class="col-md-6 mt-10">
+                    <div class="row g-3">
+                        <!-- Row 1 Full Name -->
+                        <div class="col-md-12">
+                            <label for="fullname" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}">
+                            @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+        
+                        <!-- Row 2 Position -->
+                        <div class="col-md-12">
+                            <label for="position" class="form-label">Position</label>
+                            <select class="form-select" name="usertype" id="usertype">
+                                <option selected>--</option>
+                                <option value="1" {{$user->usertype == 1 ? 'selected' : ''}}>Admin</option>
+                                <option value="2" {{$user->usertype == 2 ? 'selected' : ''}}>Student Officer</option>
+                            </select>
+                            @error('usertype')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Text Fields -->
+            <div class="row mt-2 g-3 mb-2">
 
-      <!-- Right Side: Fields -->
-      <div class="col-md-6 mt-10">
-        <div class="row g-3">
-          <!-- Row 1 First Name -->
-          <div class="col-md-12">
-            <label for="firstname" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="firstname" placeholder="">
-          </div>
-
-          <!-- Row 2 Middle Name -->
-          <div class="col-md-12">
-            <label for="middlename" class="form-label">Middle Name</label>
-            <input type="text" class="form-control" id="middlename" placeholder="">
-          </div>
-          
-        </div>
-      </div>
-    </div>
-
-    <!-- Text Fields -->
-    <div class="row mt-2 g-3">
-      <div class="col-md-6">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" class="form-control" id="username">
-      </div>
-      <div class="col-md-6">
-        <label for="lastname" class="form-label">Last Name</label>
-        <input type="text" class="form-control" id="lastname">
-      </div>
-
-      <div class="col-md-6">
-        <label for="password" class="form-label">Password</label>
-        <input type="text" class="form-control" id="password">
-      </div>
-      <div class="col-md-6">
-        <label for="position" class="form-label">Position</label>
-        <input type="text" class="form-control" id="position">
-      </div>
-
-    </div>
-</div>
+                <div class="col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" class="form-control" id="email" name="email" value="{{$user->email}}">
+                    @error('email')
+                        <span class="text-danger">{{ $message }}</span> 
+                    @enderror
+                </div>
+                <div class="col-md-6">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{$user->username}}">
+                    @error('username')
+                        <span class="text-danger">{{ $message }}</span> 
+                    @enderror
+                </div>
+        
+                <div class="col-md-6 mb-2">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" value="{{old ('password')}}">
+                    @error('password')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+        
             <div class="modal-footer">
                 <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-submit">Submit</button>
+                <button type="submit" class="btn btn-submit">Update</button>
             </div>
-        </div>
-    </div>
-    
-</div>   
+        </form>
+        
+      </div>
+  </div>
+
+</div>
+</div>  
+@endforeach
+ 
 
 <!--SUCCESS MODAL
 <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">

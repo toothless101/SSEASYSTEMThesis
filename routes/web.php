@@ -13,3 +13,5 @@ Route::get('admin/dashboard', [UserController::class, 'dashboard'])->name('admin
 //Officer CRUD
 Route::get('admin/officer', [UserController::class, 'officer'])->name('admin_officer');
 Route::post('officer/create', [UserController::class, 'createOfficer'])->name('officer_store');
+Route::get('officer/edit/{user}', [UserController::class, 'editOfficer'])->name('officer_edit');
+Route::put('officer/update/{user}', [UserController::class, 'updateOfficer'])->name('officer_update');
