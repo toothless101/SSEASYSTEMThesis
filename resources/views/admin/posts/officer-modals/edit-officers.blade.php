@@ -10,9 +10,9 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form method="" action="{{route('officer_update', ['user' =>$user->id])}}" enctype="multipart/form-data">
+          <form  action="{{route('officer_update', ['user' =>$user->id])}}" method="POST" enctype="multipart/form-data">    <!--route('officer_update', ['user' =>$user->id])-->
             @csrf
-             @method('PUT') 
+            @method('PUT') 
 
             @if (session('success'))
                 <div class="alert alert-success">
@@ -34,7 +34,7 @@
                         <!-- Image Preview Section -->
                         <div class="d-flex justify-content-center">
                             <div class="image-holder">
-                                <img id="output" src="{{ $user->user_img ? Storage::url($user->user_img) : asset('img/no-image-available.png') }}" alt="Placeholder Image">
+                                <img id="output" src="/images/{{ $user->user_img}}">
                             </div>
                         </div>
                         <!-- File Input -->
@@ -117,26 +117,26 @@
 @endforeach
  
 
-<!--SUCCESS MODAL
+
 <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content text-center p-4">
             <div class="modal-body">
-                <!-- Success Icon 
+                <!-- Success Icon -->
                 <div class="mb-3">
                     <div class="success-icon d-flex justify-content-center align-items-center mx-auto">
                         <i class="bi bi-check-circle-fill"></i>
                     </div>
                 </div>-->
-                <!-- Success Message 
+                <!-- Success Message -->
                 <h3 class="fw-bold text-uppercase text-success">Success</h3>
-                <p class="mt-2">Officer Successfully Added</p>-->
-                <!-- OK Button
+                <p class="mt-2">Officer Successfully Added</p>
+                <!-- OK Button-->
                 <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">OK</button>
             </div>
         </div>
     </div>
-</div>-->
+</div>
 
 <script>
   function loadFile(event) {
