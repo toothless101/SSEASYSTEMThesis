@@ -7,7 +7,7 @@
     <ul class="nav-links">
         <!-- Dashboard -->
         <li>
-            <a href="{{route('admin_dashboard')}}" class="">
+            <a href="{{route('admin_dashboard')}}" class="{{request()->routeIs('admin_dashboard') ? 'active' : ''}}">
                 <i class="fa-solid fa-gauge-high"></i>
                 <span class="link_name">Dashboard</span>
             </a>

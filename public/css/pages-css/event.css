@@ -94,6 +94,11 @@ tbody tr:nth-child(even){
 .sched_type{
     color:#550000;
 }
+
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 /*.form-group label{
     position: relative;
     transform: translateY(17px);
@@ -150,7 +155,7 @@ tbody tr:nth-child(even){
 /*DATE TIME PICKER OVERWRITE*/
 .datepicker table tr td.active, .datepicker table tr td.active.disabled, .datepicker table tr td.active.disabled:hover, .datepicker table tr td.active:hover {
     background-color: #550000 !important;
-    color: #fff;
+    color: #fff !important;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
     background-image: linear-gradient(to bottom, #550000, #800505) !important;
 }

@@ -1,18 +1,5 @@
 
-<!-- Bootstrap Icons -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<!-- Bootstrap Datepicker CSS -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
-
-<!-- Bootstrap Multiselect Plugin -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
-
-<!--MULTISELECT DROPDOWN-->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/css/multi-select-tag.css">
-
+@extends('layout.app')
 <!-- Custom CSS -->
 <link rel="stylesheet" href="{{ asset('css/pages-css/event.css') }}">
 
@@ -24,11 +11,26 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addEvent">
+
+                <form id="addEvent" action="{{ route('event_store') }}" method="POST">
+                    @csrf
+
+                    @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                     <div class="row mt-1">
                         <!-- Event Name -->
                         <div class="form-group col-md-6">
-                            <input type="text" id="eventName" class="form-control">
+                            <input type="text" id="eventName" class="form-control" value="{{ old('even_Name') }}">
                             <label for="eventName" class="form-label">Event Name</label>
                         </div>
 
@@ -36,16 +38,16 @@
                         <div class="form-group col-md-6 mb-3">
                             <select id="eventType" class="form-select">
                                 <option value="none" disabled>Select an Event Type</option>
-                                <option value="whole-day">Wholeday</option>
-                                <option value="half-day-morning">Half-Day Morning</option>
-                                <option value="half-day-afternoon">Half-Day Afternoon</option>
+                                <option value="whole-day {{old('event_type') == 1 ? 'selected' : ''}}">Wholeday</option>
+                                <option value="half-day-morning {{old('event_type') == 2 ? 'selected' : ''}}">Half-Day Morning</option>
+                                <option value="half-day-afternoon {{old('event_type') == 3 ? 'selected' : ''}}">Half-Day Afternoon</option>
                             </select>
                             <label for="eventType" class="form-label">Event Type</label>
                         </div>
 
                         <!-- Event Place -->
                         <div class="form-group col-md-6 mb-3">
-                            <input type="text" id="eventPlace" class="form-control">
+                            <input type="text" id="eventPlace" class="form-control" value="{{ old('event_place') }}">
                             <label for="eventPlace" class="form-label">Event Venue</label>
                         </div>
 
@@ -53,7 +55,7 @@
                         <!-- Date of Event -->
                         <div class="form-group col-md-6 mb-3">
                             <div class="input-group">
-                                <input type="text" id="dateofEvent" class="form-control datepicker">
+                                <input type="text" id="dateofEvent" class="form-control datepicker" value="{{ old('event_date') }}">
                                 <button class="btn btn-outline-secondary" type="button" id="datepicker-trigger">
                                     <i class="bi bi-calendar2-event"></i>
                                 </button>
@@ -74,8 +76,11 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <select  name="selectOfficer" id="selectOfficer" placeholder="Select Officer" multiple>
-                                    <option value="1">Hilary Poralan</option>
-                                    <option value="2">Hannah Mae Lumangtad</option>
+                                    @foreach($users as $user) <!-- Loop over the users -->
+                                        <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                                            {{ $user->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="addOfficer">
@@ -83,7 +88,7 @@
                                     Add Officer
                                 </button>
                             </div>
-                            <div class="checkbox-container col-md-6">
+                            {{-- <div class="checkbox-container col-md-6">
                                 <div class="checkbox-item" id="day1">
                                   Day 1 <input type="checkbox" id="cb_day1">
                                 </div>
@@ -105,13 +110,13 @@
                                 <div class="checkbox-item" id="day7">
                                   Day 7 <input type="checkbox" id="cb_day7">
                                 </div>
-                              </div>
+                              </div> --}}
                         </div>
                       </div>
 
                       <!--TIME SCHEDULE-->
                       <div class="container mt-4">
-                        <div class="row">
+                        <div class="row schedule_container">
                             <!-- Morning Schedule -->
                             <div class="col-md-6 schedule-section" id="morningSchedule" style="display:none;">
                                 <div class="div-title">Morning Schedule</div>
@@ -236,22 +241,30 @@
     const eventType = document.getElementById("eventType");
     const morningSchedule = document.getElementById("morningSchedule");
     const afternoonSchedule = document.getElementById("afternoonSchedule");
+    const  scheduleContainer = document.querySelector('.schedule_container');
 
     // Function to update the layout based on selected event type
     function updateLayout() {
         const selectedType = eventType.value; // Get the selected value from the dropdown
 
+        scheduleContainer.style.display = 'flex';
+        scheduleContainer.style.justifyContent = 'space-between'; // Default layouts
+
         // Handle the different schedule types
         if (selectedType === "whole-day") {
             morningSchedule.style.display = 'block'; // Show morning schedule
             afternoonSchedule.style.display = 'block'; // Show afternoon schedule
+            scheduleContainer.style.justifyContent = 'space-between'; // Adjust layout
             
         } else if (selectedType === "half-day-morning") {
             morningSchedule.style.display = 'block'; // Show morning schedule
             afternoonSchedule.style.display = 'none'; // Hide afternoon schedule
+            scheduleContainer.style.justifyContent = 'center'; // Adjust layout
+
         } else if (selectedType === "half-day-afternoon") {
             morningSchedule.style.display = 'none'; // Hide morning schedule
             afternoonSchedule.style.display = 'block'; // Show afternoon schedule
+            scheduleContainer.style.justifyContent = 'center'; // Adjust layout
         
         }
         else if(selectedType === "none"){

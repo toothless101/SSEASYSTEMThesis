@@ -118,6 +118,9 @@ tr.no-data {
     border: none;
     font-size: 13px;
 }
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
 
 .form-label {
     position: relative;
@@ -127,6 +130,7 @@ tr.no-data {
     transition: 0.3s ease;
     font-size: 12px;
 }
+
 
 
 /*UPLOAD IMAGE*/

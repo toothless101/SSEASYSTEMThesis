@@ -20,3 +20,4 @@ Route::get('officer/{user}/show', [UserController::class, 'showOfficer'])->name(
 
 //Event Crud
 Route::get('admin/event', [EventController::class, 'event'])->name('admin_event');
+Route::post('event/create', [EventController::class, 'createEvent'])->name('event_store');
