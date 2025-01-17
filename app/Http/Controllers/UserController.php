@@ -77,9 +77,9 @@ class UserController extends Controller
         'name' => 'required|string|max:255',
         'email' => 'required|email',
         'username' => 'required|string|max:255',
-        'password' => 'required|string|min:6',
+        //'password' => 'required|string|min:6',
         'usertype' => 'required|integer|in:1,2',
-      //  'user_img' => 'nullable|image|max:2048',
+        'user_img' => 'nullable|image|max:2048',
     ]);
 
     $filename = "";
@@ -104,7 +104,7 @@ class UserController extends Controller
     $user->name = $request->name;
     $user->email = $request->email;
     $user->username = $request->username;
-    $user->password = bcrypt($request->password);
+    //$user->password = bcrypt($request->password);
     $user->usertype = $request->usertype;
 
     if(!empty($filename)){
@@ -113,9 +113,13 @@ class UserController extends Controller
 
     $user->save();
 
-    return redirect()->route('admin_officer')->with('success', 'Officer updated successfully!');
+    return redirect()->route('admin_officer')->with('success_update', 'Officer updated successfully!');
 
 }
     
-
+    public function showOfficer(Request $request, $user)
+    {
+        $user = User::find($user);
+        return view('admin.posts.officer-modals.officer_profile', compact('user'));
+    }
 }

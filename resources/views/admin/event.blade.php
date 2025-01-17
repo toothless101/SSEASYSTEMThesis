@@ -58,8 +58,8 @@
         </table> 
 </section>
 
-@include('posts.event-modals.create-new-event-modal')
-@include('posts.event-modals.edit-events')
+@include('admin.posts.event-modals.create-new-event-modal')
+@include('admin.posts.event-modals.edit-events')
 
 
 <script>

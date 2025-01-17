@@ -14,7 +14,7 @@
             @csrf
             @method('PUT') 
 
-            @if (session('success'))
+            {{-- @if (session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
@@ -24,7 +24,7 @@
                 <div class="alert alert-danger">
                     {{ session('error') }}
                 </div>
-            @endif
+            @endif --}}
 
 
             <div class="row">
@@ -94,13 +94,13 @@
                     @enderror
                 </div>
         
-                <div class="col-md-6 mb-2">
+                {{-- <div class="col-md-6 mb-2">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control" id="password" name="password" value="{{old ('password')}}">
                     @error('password')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
-                </div>
+                </div>  --}}
             </div>
         
             <div class="modal-footer">
@@ -118,7 +118,7 @@
  
 
 
-<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="successUpdateModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content text-center p-4">
             <div class="modal-body">
@@ -127,16 +127,33 @@
                     <div class="success-icon d-flex justify-content-center align-items-center mx-auto">
                         <i class="bi bi-check-circle-fill"></i>
                     </div>
-                </div>-->
+                </div>
                 <!-- Success Message -->
                 <h3 class="fw-bold text-uppercase text-success">Success</h3>
-                <p class="mt-2">Officer Successfully Added</p>
+                <p class="mt-2">Officer Successfully Updated</p>
                 <!-- OK Button-->
                 <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">OK</button>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <div class="success-icon d-flex justify-content-center align-items-center mx-auto">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </div>
+                </div>
+                <h3 class="fw-bold text-uppercase text-success">Error!</h3>
+                <p class="mt-2">Error {{session('error')}}</p>
+                <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+  </div>
 
 <script>
   function loadFile(event) {
@@ -146,4 +163,23 @@
       URL.revokeObjectURL(output.src); // Free up memory
     }
   }
+
 </script>
+
+@if(session('success_update'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const successModal = new bootstrap.Modal(document.getElementById('successUpdateModal'));
+            successModal.show();
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+            errorModal.show();
+        });
+    </script>
+@endif

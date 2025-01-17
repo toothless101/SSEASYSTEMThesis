@@ -25,7 +25,7 @@
 
         <!--Officers-->
         <li>
-            <a href="{{route('admin_officer')}}" class="">
+            <a href="{{route('admin_officer')}}" class="{{ request()->routeIs('admin_officer') ? 'active' : '' }}">
                 <i class="fa-solid fa-user"></i>
                 <span class="link_name">Officers</span>
             </a>
@@ -57,7 +57,7 @@
 
         <!-- Events -->
         <li>
-            <a href="" class="">
+            <a href="{{route('admin_event')}}" class="{{request()->routeIs('admin_event') ? 'active' : ''}}">
                 <i class="fa-solid fa-calendar-days"></i>
                 <span class="link_name">Events</span>
             </a>

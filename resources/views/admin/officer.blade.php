@@ -44,8 +44,8 @@
                 @foreach ($users as $key => $user) <!--$user variable--->
                     <tr>
                         <td>{{ ++$key}}</td>
-                        <td><img src="/images/{{ $user->user_img}}" style="width: 50px; height: 50px; border-radius: 50px"></td>
-                        <td id="name-clm">{{ $user->name}}</td>
+                        <td><img src="/images/{{ $user->user_img}}" style="width: 30px; height: 30px; border-radius: 50px"></td>
+                        <td>{{ $user->name}}</td>
                         <td>{{ $user->email}} </td>
                         <td>@if($user->usertype == 1)
                                 Admin
@@ -57,9 +57,16 @@
                         </td>
                         
                         <td>
+                            <button style="background-color: transparent; border: none;">
                                 <a href="#" class="" data-bs-toggle="modal" data-bs-target="#editOfficerModal{{$user->id}}">
                                     <i class="bi bi-pencil-fill" style="color: #550000;"></i>
                                 </a>
+                           </button>
+                           <button style="background-color: transparent; border: none;">
+                                <a href="{{route('officer_show', $user->id)}}" class="">
+                                    <i class="bi bi-eye-fill" style="color: #550000; margin-left: 5px;"></i>
+                                </a>
+                           </button>
                         </td>    
 
                         <td>Assigned </td>

@@ -8,6 +8,10 @@
     color:white;
 }
 
+.fa-circle-arrow-left{
+    font-size: 20px;
+}
+
 
 .search-container {
     position: relative; 
@@ -61,9 +65,6 @@ th, td {
     
 }
 
-#name-clm{
-    text-align: start;
-}
 th {
     color: #550000;
     font-weight:lighter;
@@ -72,9 +73,17 @@ th {
 tr, th{
     font-size: 13px;
 }
-
-th:first-child{
+td{
     text-align: start;
+}
+
+td:first-child{
+    text-align: center !important;
+}
+
+td:nth-child(6){
+    justify-content: center !important;
+    align-items: center ;    
 }
 td{
     color: #550000;
@@ -247,9 +256,10 @@ input.form-control {
 
 /*OFFICER'S PROFILE*/
 .officer_profile_title label{
-    font-size: 32px;
+    font-size: 30px;
     color: #550000;
     font-weight: 600;
+    margin-left: 15px;
 }
 
 .officer-detail-container {
