@@ -1,4 +1,17 @@
-@extends('layout.app')
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Datepicker CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+
+<!-- Bootstrap Multiselect Plugin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+
+<!--MULTISELECT DROPDOWN-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/css/multi-select-tag.css">
 <!-- Custom CSS -->
 <link rel="stylesheet" href="{{ asset('css/pages-css/event.css') }}">
 
@@ -14,23 +27,22 @@
                 <form id="addEvent" action="{{route('event_store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
-                    <!-- Success and Error Messages -->
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
                     @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
 
                     <div class="row mt-1">
                         <!-- Event Name -->
                         <div class="form-group col-md-6">
-                            <input type="text" id="eventName" name="event_name" class="form-control" value="{{ old('event_name') }}">
+                            <input type="text" id="eventName" class="form-control" value="{{ old('event_name') }}">
                             <label for="eventName" class="form-label">Event Name</label>
 
                             @error('event_name')
@@ -55,17 +67,18 @@
 
                         <!-- Event Place -->
                         <div class="form-group col-md-6 mb-3">
-                            <input type="text" id="eventPlace" name="event_place" class="form-control" value="{{ old('event_place') }}">
+                            <input type="text" id="eventPlace" class="form-control" value="{{ old('event_place') }}">
                             <label for="eventPlace" class="form-label">Event Venue</label>
                             @error('event_place')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
 
+
                         <!-- Date of Event -->
                         <div class="form-group col-md-6 mb-3">
                             <div class="input-group">
-                                <input type="date" id="dateofEvent" name="event_date" class="form-control" value="{{ old('event_date') }}">
+                                <input type="date" id="dateofEvent" class="form-control" value="{{ old('event_date') }}">
                             </div>
                             <label for="dateofEvent" class="form-label" id="eventDate">Event Date</label>
                             @error('event_date')
@@ -75,8 +88,8 @@
 
                     </div>
 
-                    <!-- Assigned Officers -->
-                    <div class="assigned-officers mt-2">
+
+                      <div class="assigned-officers mt-2">
                         <div class="ass-div-title">
                             <h6>Assign Officers</h6>
                         </div>
@@ -85,15 +98,15 @@
                                 <img src="{{asset('img/officer-icon.png')}}" alt="">
                             </div>
                             <div class="form-group col-md-4">
-                                <select name="user_id[]" id="user_id" placeholder="Select Officer" multiple>
-                                    @foreach($users as $user) 
-                                        <option value="{{ $user->id }}" {{ old('user_id') && in_array($user->id, old('user_id')) ? 'selected' : '' }}>
+                                <select  name="selectOfficer" id="selectOfficer" placeholder="Select Officer" multiple>
+                                    @foreach($users as $user) <!-- Loop over the users -->
+                                        <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
                                             {{ $user->name }}
                                         </option>
                                     @endforeach
                                 </select>
 
-                                @error('user_id')
+                                @error('selectOfficer')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -102,11 +115,12 @@
                                     Add Officer
                                 </button>
                             </div>
+                            
                         </div>
-                    </div>
+                      </div>
 
-                    <!-- Time Schedule -->
-                    <div class="container mt-4 mb-4">
+                      <!--TIME SCHEDULE-->
+                      <div class="container mt-4">
                         <div class="row">
                             <!-- Morning Schedule -->
                             <div class="col-md-6 schedule-section" id="morningSchedule" style="display:none;">
@@ -116,22 +130,22 @@
                                         <h6 class="checkInLabel">Check In</h6>
                                         <div class="startEndLabel">Start Time</div>
                                         <div class="input-group">
-                                            <input type="time" id="morning-checkin" name="morning_in_start" class="form-control" value="{{ old('morning_in_start') }}">
+                                            <input type="time" id="morning-checkin" class="form-control" value="{{ old('morning_in_start') }}">
                                         </div>
                                         <div class="startEndLabel">End Time</div>
                                         <div class="input-group">
-                                            <input type="time" id="morning-checkin-end" name="morning_in_end" class="form-control" value="{{ old('morning_in_end') }}">
+                                            <input type="time" id="morning-checkin-end" class="form-control" value="{{ old('morning_in_end') }}">
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <h6 class="checkInLabel">Check Out</h6>
                                         <div class="startEndLabel">Start Time</div>
                                         <div class="input-group">
-                                            <input type="time" id="morning-checkout" name="morning_out_start" class="form-control" value="{{ old('morning_out_start') }}">
+                                            <input type="time" id="morning-checkout" class="form-control" value="{{ old('morning_out_start') }}"> 
                                         </div>
                                         <div class="startEndLabel">End Time</div>
                                         <div class="input-group">
-                                            <input type="time" id="morning-checkout-end" name="morning_out_end" class="form-control" value="{{ old('morning_out_end') }}">
+                                            <input type="time" id="morning-checkout-end" class="form-control" value="{{ old('morning_out_end') }}">
                                         </div>
                                     </div>
                                 </div>
@@ -144,22 +158,22 @@
                                         <h6 class="checkInLabel">Check In</h6>
                                         <div class="startEndLabel">Start Time</div>
                                         <div class="input-group">
-                                            <input type="time" id="afternoon-checkin-start" name="afternoon_in_start" class="form-control" value="{{ old('afternoon_in_start') }}">
+                                            <input type="time" id="afternoon-checkin-start" class="form-control" value="{{ old('afternoon_in_start') }}">
                                         </div>
                                         <div class="startEndLabel">End Time</div>
                                         <div class="input-group">
-                                            <input type="time" id="afternoon-checkin-end" name="afternoon_in_end" class="form-control" value="{{ old('afternoon_in_end') }}">
+                                            <input type="time" id="afternoon-checkin-end" class="form-control" value="{{ old('afternoon_in_end') }}">
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <h6 class="checkInLabel">Check Out</h6>
                                         <div class="startEndLabel">Start Time</div>
                                         <div class="input-group">
-                                            <input type="time" id="afternoon-checkout-start" name="afternoon_out_start" class="form-control" value="{{ old('afternoon_out_start') }}">
+                                            <input type="time" id="afternoon-checkout-start" class="form-control" value="{{ old('afternoon_out_start') }}">
                                         </div>
                                         <div class="startEndLabel">End Time</div>
                                         <div class="input-group">
-                                            <input type="time" id="afternoon-checkout-end" name="afternoon_out_end" class="form-control" value="{{ old('afternoon_out_end') }}">
+                                            <input type="time" id="afternoon-checkout-end" class="form-control" value="{{ old('afternoon_out_end') }}">
                                         </div>
                                     </div>
                                 </div>
@@ -167,15 +181,39 @@
                         </div>
                     </div>
 
-                    <div class="modal-footer">
+                     <div class="modal-footer">
                         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-submit">Create Event</button>
-                    </div>
+                        <button type="button" class="btn btn-submit">Create Event</button>
+                     </div>
                 </form>
             </div>
+           
         </div>
     </div>
 </div>
+
+
+
+<!--SUCCESS MODAL
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4">
+            <div class="modal-body">
+                <!-- Success Icon 
+                <div class="mb-3">
+                    <div class="success-icon d-flex justify-content-center align-items-center mx-auto">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                </div>-->
+                <!-- Success Message 
+                <h3 class="fw-bold text-uppercase text-success">Success</h3>
+                <p class="mt-2">Officer Successfully Added</p>-->
+                <!-- OK Button
+                <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>-->
 
 <!-- Bootstrap and jQuery -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -184,7 +222,6 @@
 
 <!--MULTISELECT DROPDOWN-->
 <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/js/multi-select-tag.js"></script>
-
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     // Get references to the DOM elements
@@ -224,18 +261,19 @@
     updateLayout();
 });
 
-// Initialize the multi-select dropdown
-new MultiSelectTag("user_id", {
-    rounded: true,
-    shadow: false,
-    placeholder: 'Select Officer',
-    tagColor:{
-        textColor: '#550000',
-        borderColor: '#550000',
-        bgColor: 'transparent',
-    },
-    onChange:function(values){
-        console.log(values);
-    }
-});
-</script> 
+
+//MULTISELECT DROPDOWN
+    new MultiSelectTag("selectOfficer", {
+        rounded: true,
+        shadow: false,
+        placeholder: 'Search',
+        tagColor:{
+            textColor: '#550000',
+            borderColor: '#550000',
+            bgColor: 'transparent',
+        },
+        onChange:function(values){
+            console.log(value)
+        }
+    });
+</script>

@@ -49,16 +49,16 @@ class User extends Authenticatable
         ];
     }
 
-    public function getUserTypeLabelAttribute()
-    {
-        switch ($this->user_type) {
-            case 1:
-                return 'Admin';
-            case 2:
-                return 'Student Officer';
-            default:
-                return 'Unknown';
-        }
-    }
+    // public function getUserTypeLabelAttribute()
+    // {
+    //     switch ($this->user_type) {
+    //         case 1:
+    //             return 'Admin';
+    //         case 2:
+    //             return 'Student Officer';
+    //         default:
+    //             return 'Unknown';
+    //     }
+    // }
 
 }

@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('admin.dashboard');
-});
+})->name('admin_dashboard');
 
 //DASHBOARD VIEW
-Route::get('admin/dashboard', [UserController::class, 'dashboard'])->name('admin_dashboard');
+// Route::get('admin/dashboard', [UserController::class, 'dashboard'])->name('admin_dashboard');
 
 //Officer CRUD
 Route::get('admin/officer', [UserController::class, 'officer'])->name('admin_officer');

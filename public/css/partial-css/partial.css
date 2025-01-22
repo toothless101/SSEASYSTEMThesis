@@ -482,6 +482,7 @@ body::-webkit-scrollbar {
 #wlcm_card{
     background-color: transparent;
     box-shadow: none;
+    border: none;
 }
 
 /*current attendees table*/
